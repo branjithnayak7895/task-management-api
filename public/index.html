@@ -1,0 +1,2305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Management Enterprise Platform - Capstone Edition</title>
+  <!-- Favicon & Custom Logo -->
+  <link rel="icon" type="image/png" href="/logo.png">
+  <link rel="apple-touch-icon" href="/logo.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* Dynamic Theme CSS Variables */
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+      --card-bg: rgba(30, 41, 59, 0.75);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --secondary: #ec4899;
+      --accent: #10b981;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --code-bg: #090d16;
+      --input-bg: rgba(15, 23, 42, 0.6);
+    }
+
+    [data-theme="cyberpunk"] {
+      --bg-gradient: linear-gradient(135deg, #050515 0%, #1a0933 50%, #0d001a 100%);
+      --card-bg: rgba(26, 16, 48, 0.8);
+      --card-border: rgba(236, 72, 153, 0.3);
+      --primary: #d946ef;
+      --primary-hover: #c026d3;
+      --secondary: #06b6d4;
+      --accent: #22c55e;
+      --text-main: #fdf4ff;
+      --text-muted: #a855f7;
+      --code-bg: #050010;
+      --input-bg: rgba(15, 5, 30, 0.8);
+    }
+
+    [data-theme="emerald"] {
+      --bg-gradient: linear-gradient(135deg, #022c22 0%, #064e3b 50%, #022c22 100%);
+      --card-bg: rgba(6, 78, 59, 0.7);
+      --card-border: rgba(52, 211, 153, 0.25);
+      --primary: #10b981;
+      --primary-hover: #059669;
+      --secondary: #14b8a6;
+      --accent: #34d399;
+      --text-main: #ecfdf5;
+      --text-muted: #6ee7b7;
+      --code-bg: #012018;
+      --input-bg: rgba(2, 44, 34, 0.7);
+    }
+
+    [data-theme="sunset"] {
+      --bg-gradient: linear-gradient(135deg, #450a0a 0%, #78350f 50%, #310707 100%);
+      --card-bg: rgba(120, 53, 15, 0.65);
+      --card-border: rgba(251, 146, 60, 0.3);
+      --primary: #f97316;
+      --primary-hover: #ea580c;
+      --secondary: #e11d48;
+      --accent: #facc15;
+      --text-main: #fff7ed;
+      --text-muted: #fdba74;
+      --code-bg: #210404;
+      --input-bg: rgba(69, 10, 10, 0.7);
+    }
+
+    [data-theme="amethyst"] {
+      --bg-gradient: linear-gradient(135deg, #2e1065 0%, #3b0764 50%, #1e1b4b 100%);
+      --card-bg: rgba(59, 7, 100, 0.7);
+      --card-border: rgba(192, 132, 252, 0.3);
+      --primary: #a855f7;
+      --primary-hover: #9333ea;
+      --secondary: #f43f5e;
+      --accent: #fbbf24;
+      --text-main: #faf5ff;
+      --text-muted: #d8b4fe;
+      --code-bg: #14032d;
+      --input-bg: rgba(46, 16, 101, 0.7);
+    }
+
+    [data-theme="light"] {
+      --bg-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --card-border: rgba(148, 163, 184, 0.35);
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --secondary: #db2777;
+      --accent: #059669;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --code-bg: #1e293b;
+      --input-bg: rgba(255, 255, 255, 0.95);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 1.5rem;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding: 0.75rem 1.25rem;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .nav-brand {
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+      object-fit: cover;
+    }
+
+    .theme-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .theme-chip {
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--card-border);
+      background: rgba(15, 23, 42, 0.3);
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+    }
+
+    .theme-chip.active, .theme-chip:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.35rem;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 1.15rem;
+    }
+
+    .hero-banner-container {
+      width: 100%;
+      max-height: 180px;
+      border-radius: 1.25rem;
+      overflow: hidden;
+      margin-top: 1rem;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+      position: relative;
+    }
+
+    .hero-banner-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.9);
+      transition: transform 0.5s ease;
+    }
+
+    .hero-banner-container:hover .hero-banner-img {
+      transform: scale(1.02);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.3rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+      margin-top: 0.5rem;
+    }
+
+    .nav-tabs-bar {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .nav-tab-btn {
+      padding: 0.6rem 1.1rem;
+      border-radius: 0.75rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .nav-tab-btn.active, .nav-tab-btn:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: 0.85rem;
+      padding: 1rem 1.25rem;
+      text-align: center;
+    }
+
+    .stat-val {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-top: 0.25rem;
+    }
+
+    .stat-lbl {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 980px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-main);
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 0.75rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 0.35rem;
+      color: var(--text-muted);
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      border-radius: 0.5rem;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.55rem 1rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: rgba(51, 65, 85, 0.8);
+      color: var(--text-main);
+    }
+    .btn-secondary:hover {
+      background: rgba(71, 85, 105, 1);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+    }
+    .btn-danger:hover {
+      background: #dc2626;
+    }
+
+    .task-item {
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .task-item.pinned {
+      border-color: var(--warning);
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.15);
+    }
+
+    .task-item.overdue {
+      border-color: var(--danger);
+      background: rgba(239, 68, 68, 0.08);
+    }
+
+    .task-item:hover {
+      border-color: var(--primary);
+    }
+
+    .task-title {
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+
+    .task-desc {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .tag-low { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .tag-medium { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+    .tag-high { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+    .tag-cat { background: rgba(99, 102, 241, 0.2); color: #c7d2fe; }
+    .tag-custom { background: rgba(236, 72, 153, 0.2); color: #f472b6; }
+    .tag-overdue { background: rgba(239, 68, 68, 0.3); color: #fee2e2; border: 1px solid var(--danger); }
+    .tag-pinned { background: rgba(245, 158, 11, 0.3); color: #fef08a; }
+
+    /* Eisenhower Grid Layout */
+    .eisenhower-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .eisen-quadrant {
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      min-height: 220px;
+    }
+
+    .eisen-header {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* Gantt Chart Layout */
+    .gantt-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .gantt-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--input-bg);
+      padding: 0.6rem 0.85rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--card-border);
+    }
+
+    .gantt-label {
+      width: 180px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .gantt-track {
+      flex: 1;
+      height: 20px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 9999px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .gantt-bar {
+      height: 100%;
+      border-radius: 9999px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width 0.5s ease;
+    }
+
+    /* CLI Terminal Box */
+    .cli-terminal {
+      background: #020617;
+      border: 1px solid var(--card-border);
+      border-radius: 0.85rem;
+      padding: 1.25rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #38bdf8;
+      min-height: 380px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cli-output {
+      flex: 1;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      margin-bottom: 1rem;
+      max-height: 300px;
+    }
+
+    .cli-input-line {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .cli-prompt {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .cli-input {
+      background: transparent;
+      border: none;
+      color: #f8fafc;
+      font-family: 'JetBrains Mono', monospace;
+      outline: none;
+      width: 100%;
+      font-size: 0.9rem;
+    }
+
+    /* Sticker Badges */
+    .sticker-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 9999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #f59e0b, #ec4899);
+      color: white;
+      box-shadow: 0 2px 6px rgba(245, 158, 11, 0.3);
+    }
+
+    /* Command Palette Overlay Modal */
+    .palette-modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      z-index: 3000;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 10vh;
+    }
+
+    .palette-box {
+      background: var(--card-bg);
+      border: 1px solid var(--primary);
+      border-radius: 1rem;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      padding: 1.5rem;
+    }
+
+    /* Pomodoro Timer Bar */
+    .pomo-widget {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(15, 23, 42, 0.5);
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--card-border);
+      margin-bottom: 1rem;
+    }
+
+    /* Toast Notification Container */
+    .toast-container {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .toast {
+      padding: 0.75rem 1.25rem;
+      border-radius: 0.5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .console-box {
+      background: var(--code-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.825rem;
+      color: #38bdf8;
+      max-height: 350px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+
+    .filters-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .pagination {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    .tab-buttons {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 0.5rem;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+      justify-content: space-between;
+    }
+
+    /* Kanban layout */
+    .kanban-board {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .kanban-col {
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+    }
+
+    .kanban-col-header {
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Command Palette Modal (Ctrl+K) -->
+  <div class="palette-modal" id="cmdPalette" style="display: none;" onclick="closePaletteOnBg(event)">
+    <div class="palette-box">
+      <div style="font-weight: 700; margin-bottom: 0.75rem; color: var(--primary);">⚡ Command Palette Spotlight (Press ESC to close)</div>
+      <input type="text" id="paletteSearch" placeholder="Type a command or shortcut..." oninput="filterPalette()" style="margin-bottom: 1rem;">
+      <div id="paletteResults" style="display: flex; flex-direction: column; gap: 0.4rem;">
+        <button class="btn btn-secondary" onclick="executePalette('new')">➕ Create New Task (Ctrl+N)</button>
+        <button class="btn btn-secondary" onclick="executePalette('search')">🔍 Focus Task Search (Ctrl+F)</button>
+        <button class="btn btn-secondary" onclick="executePalette('theme')">🎨 Switch Theme</button>
+        <button class="btn btn-secondary" onclick="executePalette('health')">📊 Check System Health & Ping</button>
+        <button class="btn btn-secondary" onclick="executePalette('docs')">📄 View Swagger OpenAPI Docs</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Top Navigation Bar -->
+    <div class="top-nav">
+      <div class="nav-brand">
+        <img src="/logo.png" alt="Logo" class="brand-logo">
+        <span>Task Platform Capstone</span>
+      </div>
+      <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+        <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="toggleAudio()"><span id="audioIcon">🔊 Sound On</span></button>
+        <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="openCmdPalette()">🔍 Ctrl+K</button>
+        <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="checkSystemHealth()">📊 System Health</button>
+        <a href="/api/docs" target="_blank" class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; text-decoration: none;">📄 Swagger Docs</a>
+        <div class="theme-bar">
+          <button class="theme-chip active" onclick="setTheme('indigo')">🌌 Indigo</button>
+          <button class="theme-chip" onclick="setTheme('cyberpunk')">⚡ Neon</button>
+          <button class="theme-chip" onclick="setTheme('emerald')">🌲 Emerald</button>
+          <button class="theme-chip" onclick="setTheme('sunset')">🌅 Sunset</button>
+          <button class="theme-chip" onclick="setTheme('amethyst')">🔮 Amethyst</button>
+          <button class="theme-chip" onclick="setTheme('light')">☀️ Light</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Header -->
+    <header>
+      <h1>Task Management Enterprise Platform</h1>
+      <p>Express • MongoDB ODM • Multi-Tenant • Sprint Analytics • Webhooks • CLI Terminal</p>
+      <div class="badge">🏆 Capstone Commercial Edition - 20 Enterprise Features Active</div>
+
+      <!-- 3D Hero Banner Graphic -->
+      <div class="hero-banner-container">
+        <img src="/hero_banner.png" alt="Productivity SaaS Banner" class="hero-banner-img">
+      </div>
+    </header>
+
+    <!-- Workspace View Navigation Tabs -->
+    <div class="nav-tabs-bar">
+      <button class="nav-tab-btn active" id="viewTabTasks" onclick="switchWorkspaceTab('tasks')">📋 Tasks & Kanban</button>
+      <button class="nav-tab-btn" id="viewTabEisenhower" onclick="switchWorkspaceTab('eisenhower')">🎯 Eisenhower Matrix</button>
+      <button class="nav-tab-btn" id="viewTabGantt" onclick="switchWorkspaceTab('gantt')">📅 Gantt Timeline</button>
+      <button class="nav-tab-btn" id="viewTabProjects" onclick="switchWorkspaceTab('projects')">📁 Projects & Sprints</button>
+      <button class="nav-tab-btn" id="viewTabTeams" onclick="switchWorkspaceTab('teams')">👥 Teams & Workload</button>
+      <button class="nav-tab-btn" id="viewTabNotifs" onclick="switchWorkspaceTab('notifs')">🔔 Notifications (<span id="unreadCountBadge">0</span>)</button>
+      <button class="nav-tab-btn" id="viewTabTerminal" onclick="switchWorkspaceTab('terminal')">⚡ Terminal CLI</button>
+      <button class="nav-tab-btn" id="viewTabAudit" onclick="switchWorkspaceTab('audit')">📜 Audit & Webhooks</button>
+    </div>
+
+    <!-- Pomodoro Focus Timer Widget -->
+    <div class="pomo-widget">
+      <span style="font-weight: 600; font-size: 0.85rem; color: var(--accent);">⏱️ Focus Pomodoro:</span>
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 700;" id="pomoTimer">25:00</span>
+      <button class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;" onclick="togglePomo()">Start / Pause</button>
+      <button class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;" onclick="resetPomo()">Reset</button>
+    </div>
+
+    <!-- Analytics Dashboard Bar -->
+    <div class="analytics-grid" id="analyticsBar" style="display: none;">
+      <div class="stat-card">
+        <div class="stat-lbl">Total Tasks</div>
+        <div class="stat-val" id="statTotal">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">Completed</div>
+        <div class="stat-val" style="color: var(--accent);" id="statCompleted">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">Pending</div>
+        <div class="stat-val" style="color: var(--warning);" id="statPending">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">Overdue</div>
+        <div class="stat-val" style="color: var(--danger);" id="statOverdue">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">Completion Rate</div>
+        <div class="stat-val" style="color: var(--primary);" id="statRate">0%</div>
+      </div>
+    </div>
+
+    <!-- TAB 1: TASKS & KANBAN WORKSPACE -->
+    <div id="tabContentTasks" class="workspace-section">
+      <div class="grid">
+        <!-- Left Column: Auth & Task Creator -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          <!-- Auth Card -->
+          <div class="card">
+            <div class="tab-buttons">
+              <button class="tab-btn active" id="tabLogin" onclick="switchAuthTab('login')">Login</button>
+              <button class="tab-btn" id="tabRegister" onclick="switchAuthTab('register')">Register</button>
+              <button class="tab-btn" id="tabProfile" style="display: none;" onclick="switchAuthTab('profile')">Profile</button>
+            </div>
+
+            <!-- Auth Form -->
+            <form id="authForm" onsubmit="handleAuth(event)">
+              <div id="nameGroup" class="form-group" style="display: none;">
+                <label for="userName">Full Name</label>
+                <input type="text" id="userName" placeholder="John Doe">
+              </div>
+              <div class="form-group" id="emailGroup">
+                <label for="userEmail">Email Address</label>
+                <input type="email" id="userEmail" required placeholder="john@example.com">
+              </div>
+              <div class="form-group" id="passGroup">
+                <label for="userPassword">Password</label>
+                <input type="password" id="userPassword" required placeholder="••••••••">
+              </div>
+              <button type="submit" class="btn" style="width: 100%;" id="authSubmitBtn">Login</button>
+            </form>
+
+            <!-- Profile Editor Form -->
+            <div id="profileSection" style="display: none;">
+              <form onsubmit="handleUpdateProfile(event)" style="margin-bottom: 1rem;">
+                <div class="form-group">
+                  <label for="editName">Update Name</label>
+                  <input type="text" id="editName">
+                </div>
+                <div class="form-group">
+                  <label for="editEmail">Update Email</label>
+                  <input type="email" id="editEmail">
+                </div>
+                <button type="submit" class="btn btn-secondary" style="width: 100%;">Save Profile</button>
+              </form>
+              <form onsubmit="handleChangePassword(event)">
+                <div class="form-group">
+                  <label for="currentPass">Current Password</label>
+                  <input type="password" id="currentPass" required placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                  <label for="newPass">New Password</label>
+                  <input type="password" id="newPass" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn btn-danger" style="width: 100%;">Change Password</button>
+              </form>
+            </div>
+
+            <!-- Token Container -->
+            <div id="tokenContainer" style="display: none;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                <span style="font-size: 0.85rem; color: var(--accent);">Authenticated as <strong id="activeUserEmail"></strong></span>
+                <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="logout()">Logout</button>
+              </div>
+              <div class="token-box" id="jwtTokenDisplay"></div>
+            </div>
+          </div>
+
+          <!-- Task Creation Card -->
+          <div class="card">
+            <div class="card-title" style="justify-content: space-between;">
+              <span>➕ Create New Task</span>
+              <select id="tplSelect" onchange="applyWorkflowTemplate()" style="max-width: 150px; font-size: 0.75rem; padding: 0.2rem 0.4rem;">
+                <option value="">⚡ Templates...</option>
+                <option value="sprint">Sprint Planning</option>
+                <option value="onboard">Client Onboarding</option>
+                <option value="triage">Bug Triage</option>
+              </select>
+            </div>
+            <form id="taskForm" onsubmit="handleCreateTask(event)">
+              <div class="form-group">
+                <label for="taskTitle">Task Title *</label>
+                <input type="text" id="taskTitle" required minlength="3" placeholder="e.g. Build Mongoose schemas (Ctrl+N)">
+              </div>
+              <div class="form-group">
+                <label for="taskDesc">Description (Markdown Supported)</label>
+                <textarea id="taskDesc" rows="2" placeholder="Task description..."></textarea>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="taskPriority">Priority</label>
+                  <select id="taskPriority">
+                    <option value="low">Low</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="high">High</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="taskCategory">Category</label>
+                  <select id="taskCategory">
+                    <option value="personal">Personal</option>
+                    <option value="work" selected>Work</option>
+                    <option value="shopping">Shopping</option>
+                    <option value="health">Health</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="taskDueDate">Due Date</label>
+                  <input type="date" id="taskDueDate">
+                </div>
+                <div class="form-group">
+                  <label for="taskTags">Tags (comma-separated)</label>
+                  <input type="text" id="taskTags" placeholder="urgent, api">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="taskEstHours">Estimated Hours</label>
+                  <input type="number" id="taskEstHours" min="0" step="0.5" placeholder="e.g. 4">
+                </div>
+                <div class="form-group">
+                  <label for="taskActHours">Actual Hours</label>
+                  <input type="number" id="taskActHours" min="0" step="0.5" placeholder="e.g. 2.5">
+                </div>
+              </div>
+              <button type="submit" class="btn" style="width: 100%;">Save Task to MongoDB</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Right Column: Tasks List, Kanban Board, Toolbar & Console -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          <!-- Tasks View Card -->
+          <div class="card">
+            <div class="card-title" style="justify-content: space-between; flex-wrap: wrap;">
+              <span>📋 Tasks Collection</span>
+              <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" id="btnViewToggle" onclick="toggleViewMode()">📌 Kanban View</button>
+                <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="exportTasks('json')">📥 JSON</button>
+                <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="exportTasks('csv')">📊 CSV</button>
+                <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="exportTasks('md')">📝 Report</button>
+                <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="backupDatabase()">💾 Backup DB</button>
+                <label class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem; cursor: pointer;">
+                  📂 Import <input type="file" id="fileImport" accept=".json" onchange="importJSON(event)" style="display: none;">
+                </label>
+                <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="fetchTasks()">↻ Refresh</button>
+              </div>
+            </div>
+
+            <!-- Search & Bulk Toolbar -->
+            <div class="toolbar">
+              <input type="text" id="searchKeyword" placeholder="🔍 Search tasks (Ctrl+F)..." oninput="debounceSearch()" style="max-width: 200px;">
+              <div style="display: flex; gap: 0.4rem;">
+                <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="bulkComplete()">✓ Complete All</button>
+                <button class="btn btn-danger" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="bulkDelete()">🗑 Clear Completed</button>
+              </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters-bar">
+              <select id="filterCompleted" onchange="fetchTasks()">
+                <option value="">All Statuses</option>
+                <option value="false">Pending</option>
+                <option value="true">Completed</option>
+              </select>
+              <select id="filterPriority" onchange="fetchTasks()">
+                <option value="">All Priorities</option>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+              <select id="filterCategory" onchange="fetchTasks()">
+                <option value="">All Categories</option>
+                <option value="work">Work</option>
+                <option value="personal">Personal</option>
+                <option value="shopping">Shopping</option>
+                <option value="health">Health</option>
+                <option value="other">Other</option>
+              </select>
+              <select id="sortBy" onchange="fetchTasks()">
+                <option value="createdAt">Sort: Created</option>
+                <option value="dueDate">Sort: Due Date</option>
+                <option value="priority">Sort: Priority</option>
+                <option value="title">Sort: Title</option>
+              </select>
+            </div>
+
+            <!-- List View Container -->
+            <div id="tasksList" style="min-height: 200px;">
+              <p style="color: var(--text-muted); text-align: center; margin-top: 2rem;">Please login to view tasks.</p>
+            </div>
+
+            <!-- Kanban Board Container -->
+            <div id="kanbanBoard" class="kanban-board" style="display: none;">
+              <div class="kanban-col">
+                <div class="kanban-col-header" style="color: var(--warning);">📝 TO DO <span id="countTodo">0</span></div>
+                <div id="colTodo"></div>
+              </div>
+              <div class="kanban-col">
+                <div class="kanban-col-header" style="color: var(--primary);">⚡ IN PROGRESS <span id="countInProgress">0</span></div>
+                <div id="colInProgress"></div>
+              </div>
+              <div class="kanban-col">
+                <div class="kanban-col-header" style="color: var(--accent);">✅ COMPLETED <span id="countCompleted">0</span></div>
+                <div id="colCompleted"></div>
+              </div>
+            </div>
+
+            <div class="pagination" id="paginationControls" style="display: none;">
+              <button class="btn btn-secondary" id="btnPrev" onclick="changePage(-1)">Previous</button>
+              <span style="font-size: 0.85rem; color: var(--text-muted);" id="pageIndicator">Page 1 of 1</span>
+              <button class="btn btn-secondary" id="btnNext" onclick="changePage(1)">Next</button>
+            </div>
+          </div>
+
+          <!-- API Response Console Card -->
+          <div class="card">
+            <div class="card-title">📡 Live API Response Logs</div>
+            <div class="console-box" id="apiConsole">// Responses from API calls will appear here in real-time...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: EISENHOWER MATRIX VIEW -->
+    <div id="tabContentEisenhower" class="workspace-section" style="display: none;">
+      <div class="card">
+        <div class="card-title">🎯 Eisenhower 2x2 Priority Matrix View</div>
+        <div class="eisenhower-grid">
+          <div class="eisen-quadrant">
+            <div class="eisen-header" style="color: var(--danger);">🔥 DO FIRST (Urgent & Important)</div>
+            <div id="eisenDo"></div>
+          </div>
+          <div class="eisen-quadrant">
+            <div class="eisen-header" style="color: var(--warning);">📅 SCHEDULE (Important, Not Urgent)</div>
+            <div id="eisenSchedule"></div>
+          </div>
+          <div class="eisen-quadrant">
+            <div class="eisen-header" style="color: var(--primary);">👥 DELEGATE (Urgent, Not Important)</div>
+            <div id="eisenDelegate"></div>
+          </div>
+          <div class="eisen-quadrant">
+            <div class="eisen-header" style="color: var(--text-muted);">🗑 ELIMINATE (Neither Urgent nor Important)</div>
+            <div id="eisenEliminate"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: GANTT CHART TIMELINE -->
+    <div id="tabContentGantt" class="workspace-section" style="display: none;">
+      <div class="card">
+        <div class="card-title">📅 Project Gantt Chart & Schedule Timeline</div>
+        <div class="gantt-container" id="ganttBody">
+          <p style="color: var(--text-muted); text-align: center;">Click refresh to load timeline data...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: PROJECTS & SPRINTS -->
+    <div id="tabContentProjects" class="workspace-section" style="display: none;">
+      <div class="grid">
+        <div class="card">
+          <div class="card-title">📁 Create Project / Workspace</div>
+          <form onsubmit="handleCreateProject(event)">
+            <div class="form-group">
+              <label>Project Title *</label>
+              <input type="text" id="projTitle" required placeholder="e.g. Mobile App Redesign">
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea id="projDesc" rows="2" placeholder="Project goals..."></textarea>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Color Accent</label>
+                <input type="color" id="projColor" value="#6366f1">
+              </div>
+              <div class="form-group">
+                <label>Target Completion Date</label>
+                <input type="date" id="projTarget">
+              </div>
+            </div>
+            <button type="submit" class="btn" style="width: 100%;">Create Project</button>
+          </form>
+        </div>
+        <div class="card">
+          <div class="card-title">📁 Active Projects List</div>
+          <div id="projectsList"><p style="color: var(--text-muted);">No projects loaded.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: TEAMS & WORKLOAD -->
+    <div id="tabContentTeams" class="workspace-section" style="display: none;">
+      <div class="grid">
+        <div class="card">
+          <div class="card-title">👥 Team Management</div>
+          <form onsubmit="handleCreateTeam(event)">
+            <div class="form-group">
+              <label>Team Name *</label>
+              <input type="text" id="teamName" required placeholder="e.g. Core Engineering Team">
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea id="teamDesc" rows="2" placeholder="Team scope..."></textarea>
+            </div>
+            <button type="submit" class="btn" style="width: 100%;">Create Team</button>
+          </form>
+        </div>
+        <div class="card">
+          <div class="card-title">📊 Team Workload Heatmap & Capacity</div>
+          <div id="workloadStatsBody"><p style="color: var(--text-muted);">Loading capacity data...</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 6: NOTIFICATIONS -->
+    <div id="tabContentNotifs" class="workspace-section" style="display: none;">
+      <div class="card">
+        <div class="card-title" style="justify-content: space-between;">
+          <span>🔔 Notifications Drawer & Alerts Feed</span>
+          <div>
+            <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="markAllNotificationsRead()">Mark All Read</button>
+            <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="triggerDemoNotif()">+ Demo Alert</button>
+          </div>
+        </div>
+        <div id="notifsList" style="display: flex; flex-direction: column; gap: 0.5rem;">
+          <p style="color: var(--text-muted); text-align: center;">No notifications.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 7: INTERACTIVE DEVELOPER TERMINAL CLI -->
+    <div id="tabContentTerminal" class="workspace-section" style="display: none;">
+      <div class="card">
+        <div class="card-title">⚡ Interactive Developer CLI Terminal Window</div>
+        <div class="cli-terminal">
+          <div class="cli-output" id="cliOutput">=======================================================
+🚀 Task Management CLI Terminal Shell v1.0.0
+Type 'help' to see available shell commands.
+=======================================================</div>
+          <div class="cli-input-line">
+            <span class="cli-prompt">antigravity@task-cli:~$</span>
+            <input type="text" class="cli-input" id="cliInput" placeholder="type command (e.g. task list, health, theme cyberpunk, help)..." onkeydown="handleCliInput(event)">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 8: AUDIT LOGS & WEBHOOKS -->
+    <div id="tabContentAudit" class="workspace-section" style="display: none;">
+      <div class="grid">
+        <div class="card">
+          <div class="card-title">📜 Global System Audit Trail Logs</div>
+          <div id="auditLogBody" class="console-box" style="max-height: 400px;"><p style="color: var(--text-muted);">Loading audit logs...</p></div>
+        </div>
+        <div class="card">
+          <div class="card-title">⚡ Automated Webhook Dispatcher</div>
+          <form onsubmit="handleCreateWebhook(event)" style="margin-bottom: 1rem;">
+            <div class="form-group">
+              <label>Webhook Name</label>
+              <input type="text" id="whName" required placeholder="Slack Integration Webhook">
+            </div>
+            <div class="form-group">
+              <label>Target URL</label>
+              <input type="url" id="whUrl" required placeholder="https://hooks.slack.com/services/...">
+            </div>
+            <button type="submit" class="btn" style="width: 100%;">Register Webhook</button>
+          </form>
+          <div id="webhooksList"><p style="color: var(--text-muted);">No active webhooks registered.</p></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let authToken = localStorage.getItem('jwtToken') || '';
+    let currentAuthMode = 'login';
+    let currentPage = 1;
+    let totalPages = 1;
+    let cachedTasks = [];
+    let searchTimer = null;
+    let isKanbanView = false;
+    let pomoSeconds = 25 * 60;
+    let pomoInterval = null;
+    let soundEnabled = true;
+
+    // Web Audio Synthesizer Engine
+    function playChime(type) {
+      if (!soundEnabled) return;
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        if (type === 'success') {
+          osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+          osc.frequency.exponentialRampToValueAtTime(659.25, ctx.currentTime + 0.15); // E5
+          gain.gain.setValueAtTime(0.15, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.3);
+        } else if (type === 'click') {
+          osc.frequency.setValueAtTime(800, ctx.currentTime);
+          gain.gain.setValueAtTime(0.05, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.05);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.05);
+        }
+      } catch (err) {}
+    }
+
+    function toggleAudio() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('audioIcon').textContent = soundEnabled ? '🔊 Sound On' : '🔇 Muted';
+      showToast(soundEnabled ? 'Audio Chimes Enabled' : 'Audio Muted');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('appTheme') || 'indigo';
+      setTheme(savedTheme);
+
+      if (authToken) {
+        showAuthenticatedUI(localStorage.getItem('userEmail') || 'User');
+        fetchStats();
+        fetchTasks();
+        fetchNotifications();
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          openCmdPalette();
+        } else if (e.key === 'Escape') {
+          closeCmdPalette();
+        } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') {
+          e.preventDefault();
+          document.getElementById('taskTitle').focus();
+          showToast('Focus: New Task Input');
+        } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') {
+          e.preventDefault();
+          document.getElementById('searchKeyword').focus();
+          showToast('Focus: Search Input');
+        }
+      });
+    });
+
+    function switchWorkspaceTab(tab) {
+      playChime('click');
+      document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.workspace-section').forEach(s => s.style.display = 'none');
+
+      const activeBtn = document.getElementById(`viewTab${tab.charAt(0).toUpperCase() + tab.slice(1)}`);
+      const activeContent = document.getElementById(`tabContent${tab.charAt(0).toUpperCase() + tab.slice(1)}`);
+
+      if (activeBtn) activeBtn.classList.add('active');
+      if (activeContent) activeContent.style.display = 'block';
+
+      if (tab === 'eisenhower') fetchEisenhower();
+      if (tab === 'gantt') fetchGantt();
+      if (tab === 'projects') fetchProjects();
+      if (tab === 'teams') fetchTeams();
+      if (tab === 'notifs') fetchNotifications();
+      if (tab === 'audit') { fetchAuditLogs(); fetchWebhooks(); }
+    }
+
+    function showToast(msg) {
+      playChime('click');
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `🔔 ${escapeHtml(msg)}`;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3500);
+    }
+
+    function openCmdPalette() {
+      document.getElementById('cmdPalette').style.display = 'flex';
+      document.getElementById('paletteSearch').focus();
+    }
+
+    function closeCmdPalette() {
+      document.getElementById('cmdPalette').style.display = 'none';
+    }
+
+    function closePaletteOnBg(e) {
+      if (e.target.id === 'cmdPalette') closeCmdPalette();
+    }
+
+    function executePalette(action) {
+      closeCmdPalette();
+      if (action === 'new') document.getElementById('taskTitle').focus();
+      if (action === 'search') document.getElementById('searchKeyword').focus();
+      if (action === 'theme') setTheme(localStorage.getItem('appTheme') === 'indigo' ? 'cyberpunk' : 'indigo');
+      if (action === 'health') checkSystemHealth();
+      if (action === 'docs') window.open('/api/docs', '_blank');
+    }
+
+    function togglePomo() {
+      playChime('click');
+      if (pomoInterval) {
+        clearInterval(pomoInterval);
+        pomoInterval = null;
+        showToast('Pomodoro paused');
+      } else {
+        pomoInterval = setInterval(() => {
+          if (pomoSeconds > 0) {
+            pomoSeconds--;
+            updatePomoDisplay();
+          } else {
+            clearInterval(pomoInterval);
+            pomoInterval = null;
+            playChime('success');
+            showToast('🎉 Pomodoro Focus Session Finished!');
+          }
+        }, 1000);
+        showToast('Pomodoro session started');
+      }
+    }
+
+    function resetPomo() {
+      clearInterval(pomoInterval);
+      pomoInterval = null;
+      pomoSeconds = 25 * 60;
+      updatePomoDisplay();
+      showToast('Pomodoro timer reset');
+    }
+
+    function updatePomoDisplay() {
+      const m = String(Math.floor(pomoSeconds / 60)).padStart(2, '0');
+      const s = String(pomoSeconds % 60).padStart(2, '0');
+      document.getElementById('pomoTimer').textContent = `${m}:${s}`;
+    }
+
+    async function checkSystemHealth() {
+      try {
+        const res = await fetch('/api/system/health');
+        const data = await res.json();
+        logConsole('GET /api/system/health', data);
+        alert(`📊 System Diagnostic:\nStatus: ${data.status}\nUptime: ${data.uptimeSeconds}s\nDatabase: ${data.database.status}\nHeap Used: ${data.systemMemory.heapUsedMB} MB`);
+      } catch (err) {
+        showToast('Health check failed: ' + err.message);
+      }
+    }
+
+    function applyWorkflowTemplate() {
+      const val = document.getElementById('tplSelect').value;
+      if (val === 'sprint') {
+        document.getElementById('taskTitle').value = 'Sprint Planning & Backlog Grooming';
+        document.getElementById('taskDesc').value = '- Review user stories\n- Estimate story points\n- Assign tasks';
+        document.getElementById('taskPriority').value = 'high';
+        document.getElementById('taskCategory').value = 'work';
+        document.getElementById('taskTags').value = 'sprint, planning';
+      } else if (val === 'onboard') {
+        document.getElementById('taskTitle').value = 'Client Onboarding & Setup';
+        document.getElementById('taskDesc').value = '- Send welcome kit\n- Setup API credentials\n- Schedule kick-off call';
+        document.getElementById('taskCategory').value = 'work';
+        document.getElementById('taskTags').value = 'client, onboarding';
+      } else if (val === 'triage') {
+        document.getElementById('taskTitle').value = 'Weekly Bug Triage & Security Audit';
+        document.getElementById('taskPriority').value = 'high';
+        document.getElementById('taskCategory').value = 'work';
+        document.getElementById('taskTags').value = 'bugs, audit';
+      }
+    }
+
+    function setTheme(themeName) {
+      document.documentElement.setAttribute('data-theme', themeName);
+      localStorage.setItem('appTheme', themeName);
+      document.querySelectorAll('.theme-chip').forEach(chip => chip.classList.remove('active'));
+      const activeChip = Array.from(document.querySelectorAll('.theme-chip')).find(c => c.textContent.toLowerCase().includes(themeName));
+      if (activeChip) activeChip.classList.add('active');
+    }
+
+    function toggleViewMode() {
+      isKanbanView = !isKanbanView;
+      document.getElementById('btnViewToggle').textContent = isKanbanView ? '📋 List View' : '📌 Kanban View';
+      document.getElementById('tasksList').style.display = isKanbanView ? 'none' : 'block';
+      document.getElementById('kanbanBoard').style.display = isKanbanView ? 'grid' : 'none';
+      if (isKanbanView) renderKanban(cachedTasks);
+    }
+
+    function switchAuthTab(mode) {
+      currentAuthMode = mode;
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      
+      document.getElementById('nameGroup').style.display = mode === 'register' ? 'block' : 'none';
+      document.getElementById('emailGroup').style.display = mode === 'profile' ? 'none' : 'block';
+      document.getElementById('passGroup').style.display = mode === 'profile' ? 'none' : 'block';
+      document.getElementById('authForm').style.display = mode === 'profile' ? 'none' : 'block';
+      document.getElementById('profileSection').style.display = mode === 'profile' ? 'block' : 'none';
+
+      if (mode === 'login') document.getElementById('tabLogin').classList.add('active');
+      if (mode === 'register') document.getElementById('tabRegister').classList.add('active');
+      if (mode === 'profile') document.getElementById('tabProfile').classList.add('active');
+
+      document.getElementById('authSubmitBtn').textContent = mode === 'register' ? 'Register Account' : 'Login';
+    }
+
+    async function handleAuth(e) {
+      e.preventDefault();
+      const email = document.getElementById('userEmail').value.trim();
+      const password = document.getElementById('userPassword').value;
+      const name = document.getElementById('userName').value.trim();
+
+      const endpoint = currentAuthMode === 'register' ? '/api/users/register' : '/api/users/login';
+      const body = currentAuthMode === 'register' ? { name, email, password } : { email, password };
+
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        const data = await res.json();
+        logConsole(`${endpoint} [${res.status}]`, data);
+
+        if (data.success && data.token) {
+          authToken = data.token;
+          localStorage.setItem('jwtToken', authToken);
+          localStorage.setItem('userEmail', email);
+
+          showAuthenticatedUI(data.user ? data.user.name || email : email);
+          
+          document.getElementById('userPassword').value = '';
+          if (document.getElementById('userName')) document.getElementById('userName').value = '';
+
+          playChime('success');
+          fetchStats();
+          fetchTasks();
+          fetchNotifications();
+
+          showToast(currentAuthMode === 'register' ? `🎉 Registration successful!` : '🔑 Login successful!');
+        } else {
+          alert(data.error || 'Authentication failed');
+        }
+      } catch (err) {
+        logConsole(`${endpoint} [ERROR]`, { error: err.message });
+      }
+    }
+
+    function showAuthenticatedUI(email) {
+      document.getElementById('jwtTokenDisplay').textContent = `Bearer ${authToken}`;
+      document.getElementById('tokenContainer').style.display = 'block';
+      document.getElementById('activeUserEmail').textContent = email;
+      document.getElementById('tabProfile').style.display = 'block';
+      document.getElementById('analyticsBar').style.display = 'grid';
+    }
+
+    function logout() {
+      authToken = '';
+      localStorage.removeItem('jwtToken');
+      localStorage.removeItem('userEmail');
+      document.getElementById('tokenContainer').style.display = 'none';
+      document.getElementById('tabProfile').style.display = 'none';
+      document.getElementById('analyticsBar').style.display = 'none';
+      document.getElementById('tasksList').innerHTML = '<p style="color: var(--text-muted); text-align: center; margin-top: 2rem;">Please login to view tasks.</p>';
+      document.getElementById('paginationControls').style.display = 'none';
+      switchAuthTab('login');
+      showToast('Logged out successfully');
+    }
+
+    async function fetchStats() {
+      if (!authToken) return;
+      try {
+        const res = await fetch('/api/tasks/stats', {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          document.getElementById('statTotal').textContent = data.data.totalTasks;
+          document.getElementById('statCompleted').textContent = data.data.completedTasks;
+          document.getElementById('statPending').textContent = data.data.pendingTasks;
+          document.getElementById('statOverdue').textContent = data.data.overdueTasks;
+          document.getElementById('statRate').textContent = data.data.completionRate;
+        }
+      } catch (err) {
+        console.error('Failed to fetch stats:', err);
+      }
+    }
+
+    async function handleCreateTask(e) {
+      e.preventDefault();
+      if (!authToken) return alert('Please login first');
+
+      const title = document.getElementById('taskTitle').value;
+      const description = document.getElementById('taskDesc').value;
+      const priority = document.getElementById('taskPriority').value;
+      const category = document.getElementById('taskCategory').value;
+      const dueDate = document.getElementById('taskDueDate').value;
+      const tags = document.getElementById('taskTags').value.split(',').map(t => t.trim()).filter(Boolean);
+      const estimatedHours = parseFloat(document.getElementById('taskEstHours').value) || 0;
+      const actualHours = parseFloat(document.getElementById('taskActHours').value) || 0;
+
+      try {
+        const res = await fetch('/api/tasks', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({ title, description, priority, category, dueDate: dueDate || undefined, tags, estimatedHours, actualHours })
+        });
+        const data = await res.json();
+        logConsole('POST /api/tasks', data);
+
+        if (data.success) {
+          playChime('success');
+          document.getElementById('taskForm').reset();
+          showToast('Task created successfully');
+          fetchStats();
+          fetchTasks();
+        } else {
+          alert(data.error || 'Task creation failed');
+        }
+      } catch (err) {
+        logConsole('POST /api/tasks [ERROR]', { error: err.message });
+      }
+    }
+
+    function debounceSearch() {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => {
+        currentPage = 1;
+        fetchTasks();
+      }, 300);
+    }
+
+    async function fetchTasks() {
+      if (!authToken) return;
+
+      const completed = document.getElementById('filterCompleted').value;
+      const priority = document.getElementById('filterPriority').value;
+      const category = document.getElementById('filterCategory').value;
+      const sortBy = document.getElementById('sortBy').value;
+      const search = document.getElementById('searchKeyword').value;
+
+      let queryParams = `?page=${currentPage}&limit=10&sortBy=${sortBy}&sortOrder=desc`;
+      if (completed) queryParams += `&completed=${completed}`;
+      if (priority) queryParams += `&priority=${priority}`;
+      if (category) queryParams += `&category=${category}`;
+      if (search) queryParams += `&search=${encodeURIComponent(search)}`;
+
+      try {
+        const res = await fetch(`/api/tasks${queryParams}`, {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        logConsole(`GET /api/tasks${queryParams}`, data);
+
+        if (data.success) {
+          cachedTasks = data.data;
+          renderTasks(data.data);
+          if (isKanbanView) renderKanban(data.data);
+          totalPages = data.pagination.pages;
+          document.getElementById('pageIndicator').textContent = `Page ${data.pagination.page} of ${data.pagination.pages}`;
+          document.getElementById('paginationControls').style.display = totalPages > 1 ? 'flex' : 'none';
+          document.getElementById('btnPrev').disabled = currentPage <= 1;
+          document.getElementById('btnNext').disabled = currentPage >= totalPages;
+        }
+      } catch (err) {
+        logConsole('GET /api/tasks [ERROR]', { error: err.message });
+      }
+    }
+
+    function getRelativeTimeString(dateStr) {
+      if (!dateStr) return '';
+      const now = new Date();
+      const target = new Date(dateStr);
+      const diffDays = Math.ceil((target - now) / (1000 * 60 * 60 * 24));
+      if (diffDays < 0) return `Overdue by ${Math.abs(diffDays)} d`;
+      if (diffDays === 0) return 'Due today';
+      if (diffDays === 1) return 'Due tomorrow';
+      return `Due in ${diffDays} d`;
+    }
+
+    function renderTasks(tasks) {
+      const container = document.getElementById('tasksList');
+      if (tasks.length === 0) {
+        container.innerHTML = '<p style="color: var(--text-muted); text-align: center; margin-top: 2rem;">No tasks found.</p>';
+        return;
+      }
+
+      const now = new Date();
+
+      container.innerHTML = tasks.map(task => {
+        const isOverdue = task.dueDate && !task.completed && new Date(task.dueDate) < now;
+        const relativeTime = getRelativeTimeString(task.dueDate);
+        const subtasks = task.subtasks || [];
+        const completedSubtasks = subtasks.filter(s => s.completed).length;
+        const progressPct = subtasks.length > 0 ? Math.round((completedSubtasks / subtasks.length) * 100) : 0;
+        const comments = task.comments || [];
+
+        return `
+          <div class="task-item ${task.isPinned ? 'pinned' : ''} ${isOverdue ? 'overdue' : ''}">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
+                  <button class="btn btn-secondary" style="padding: 0.15rem 0.35rem; font-size: 0.75rem;" onclick="togglePin('${task._id}')">${task.isPinned ? '⭐' : '☆'}</button>
+                  <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTaskComplete('${task._id}', ${!task.completed})" style="width: 18px; height: 18px; cursor: pointer;">
+                  <span class="task-title" style="${task.completed ? 'text-decoration: line-through; color: var(--text-muted);' : ''}">${escapeHtml(task.title)}</span>
+                  ${task.completed ? '<span class="sticker-badge">🏆 DONE</span>' : ''}
+                  ${task.isPinned ? '<span class="tag tag-pinned">📌 Pinned</span>' : ''}
+                  <span class="tag tag-${task.priority}">${task.priority}</span>
+                  <span class="tag tag-cat">${task.category}</span>
+                  ${isOverdue ? `<span class="tag tag-overdue">⚠️ ${relativeTime}</span>` : (relativeTime ? `<span class="tag" style="background: rgba(255,255,255,0.1); color: var(--text-muted);">${relativeTime}</span>` : '')}
+                  ${(task.tags || []).map(t => `<span class="tag tag-custom">#${escapeHtml(t)}</span>`).join('')}
+                </div>
+                ${task.description ? `<div class="task-desc">${escapeHtml(task.description)}</div>` : ''}
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem;">
+                  Est: ${task.estimatedHours || 0}h • Act: ${task.actualHours || 0}h
+                  ${task.sharedWith && task.sharedWith.length > 0 ? `• Shared with ${task.sharedWith.length} user(s)` : ''}
+                </div>
+              </div>
+              <div style="display: flex; gap: 0.25rem;">
+                <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="startTaskTimer('${task._id}')">⏱️ Timer</button>
+                <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="promptAddComment('${task._id}')">💬 ${comments.length}</button>
+                <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="shareTaskModal('${task._id}')">👥 Share</button>
+                <button class="btn btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="softDeleteTask('${task._id}')">Trash</button>
+              </div>
+            </div>
+
+            <!-- Subtasks Checklist -->
+            <div class="subtask-list" style="margin-top: 0.5rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+                <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Checklist (${completedSubtasks}/${subtasks.length})</span>
+                <button class="btn btn-secondary" style="padding: 0.15rem 0.4rem; font-size: 0.7rem;" onclick="promptAddSubtask('${task._id}')">+ Subtask</button>
+              </div>
+              ${subtasks.length > 0 ? `
+                <div class="progress-bar-bg" style="background: rgba(255,255,255,0.1); height: 4px; border-radius: 2px;"><div class="progress-bar-fill" style="width: ${progressPct}%; background: var(--accent); height: 100%;"></div></div>
+                ${subtasks.map(s => `
+                  <div class="subtask-item" style="display: flex; gap: 0.4rem; align-items: center; font-size: 0.8rem; margin-top: 0.2rem;">
+                    <input type="checkbox" ${s.completed ? 'checked' : ''} onchange="toggleSubtask('${task._id}', '${s._id}')">
+                    <span style="${s.completed ? 'text-decoration: line-through;' : ''}">${escapeHtml(s.title)}</span>
+                  </div>
+                `).join('')}
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderKanban(tasks) {
+      const todo = tasks.filter(t => !t.completed && (!t.status || t.status === 'todo'));
+      const inProgress = tasks.filter(t => !t.completed && t.status === 'in-progress');
+      const completed = tasks.filter(t => t.completed || t.status === 'completed');
+
+      document.getElementById('countTodo').textContent = todo.length;
+      document.getElementById('countInProgress').textContent = inProgress.length;
+      document.getElementById('countCompleted').textContent = completed.length;
+
+      document.getElementById('colTodo').innerHTML = renderKanbanCards(todo, 'todo');
+      document.getElementById('colInProgress').innerHTML = renderKanbanCards(inProgress, 'in-progress');
+      document.getElementById('colCompleted').innerHTML = renderKanbanCards(completed, 'completed');
+    }
+
+    function renderKanbanCards(tasks, targetStatus) {
+      if (tasks.length === 0) return '<p style="font-size: 0.8rem; color: var(--text-muted); text-align: center; padding: 1rem;">No tasks</p>';
+      return tasks.map(t => `
+        <div class="task-item" style="margin-bottom: 0.5rem; padding: 0.75rem;">
+          <div style="font-weight: 600; font-size: 0.9rem;">${escapeHtml(t.title)}</div>
+          <div style="display: flex; gap: 0.25rem; margin-top: 0.4rem;">
+            ${targetStatus !== 'todo' ? `<button class="btn btn-secondary" style="padding: 0.15rem 0.35rem; font-size: 0.7rem;" onclick="updateStatus('${t._id}', 'todo')">← Todo</button>` : ''}
+            ${targetStatus !== 'in-progress' ? `<button class="btn btn-secondary" style="padding: 0.15rem 0.35rem; font-size: 0.7rem;" onclick="updateStatus('${t._id}', 'in-progress')">⚡ Progress</button>` : ''}
+            ${targetStatus !== 'completed' ? `<button class="btn btn-secondary" style="padding: 0.15rem 0.35rem; font-size: 0.7rem;" onclick="updateStatus('${t._id}', 'completed')">✓ Done</button>` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function startTaskTimer(id) {
+      try {
+        const res = await fetch(`/api/tasks/${id}/time/start`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        await res.json();
+        showToast('Timer started for task!');
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    async function fetchEisenhower() {
+      if (!authToken) return;
+      try {
+        const res = await fetch('/api/tasks/eisenhower', {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          const m = data.data;
+          document.getElementById('eisenDo').innerHTML = renderSimpleTaskGroup(m.do);
+          document.getElementById('eisenSchedule').innerHTML = renderSimpleTaskGroup(m.schedule);
+          document.getElementById('eisenDelegate').innerHTML = renderSimpleTaskGroup(m.delegate);
+          document.getElementById('eisenEliminate').innerHTML = renderSimpleTaskGroup(m.eliminate);
+        }
+      } catch (err) {}
+    }
+
+    function renderSimpleTaskGroup(tasks) {
+      if (!tasks || tasks.length === 0) return '<p style="font-size: 0.8rem; color: var(--text-muted);">None</p>';
+      return tasks.map(t => `<div style="font-size: 0.85rem; padding: 0.3rem 0; border-bottom: 1px solid var(--card-border);">• ${escapeHtml(t.title)}</div>`).join('');
+    }
+
+    async function fetchGantt() {
+      if (!authToken) return;
+      try {
+        const res = await fetch('/api/tasks/gantt', {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          const container = document.getElementById('ganttBody');
+          if (data.data.length === 0) {
+            container.innerHTML = '<p style="color: var(--text-muted);">No timeline items</p>';
+            return;
+          }
+          container.innerHTML = data.data.map(t => `
+            <div class="gantt-row">
+              <div class="gantt-label">${escapeHtml(t.title)}</div>
+              <div class="gantt-track">
+                <div class="gantt-bar" style="width: ${t.completed ? '100%' : '60%'};"></div>
+              </div>
+            </div>
+          `).join('');
+        }
+      } catch (err) {}
+    }
+
+    async function fetchProjects() {
+      if (!authToken) return;
+      try {
+        const res = await fetch('/api/projects', {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          const list = document.getElementById('projectsList');
+          if (data.data.length === 0) {
+            list.innerHTML = '<p style="color: var(--text-muted);">No projects yet.</p>';
+            return;
+          }
+          list.innerHTML = data.data.map(p => `
+            <div style="background: var(--input-bg); border: 1px solid var(--card-border); padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 0.5rem;">
+              <div style="font-weight: 700; color: ${p.color};">${escapeHtml(p.icon || '📁')} ${escapeHtml(p.title)}</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">${escapeHtml(p.description || 'No description')}</div>
+            </div>
+          `).join('');
+        }
+      } catch (err) {}
+    }
+
+    async function handleCreateProject(e) {
+      e.preventDefault();
+      const title = document.getElementById('projTitle').value;
+      const description = document.getElementById('projDesc').value;
+      const color = document.getElementById('projColor').value;
+      const targetDate = document.getElementById('projTarget').value;
+
+      try {
+        const res = await fetch('/api/projects', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+          body: JSON.stringify({ title, description, color, targetDate: targetDate || undefined })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Project created!');
+          fetchProjects();
+        }
+      } catch (err) {}
+    }
+
+    async function fetchTeams() {
+      if (!authToken) return;
+      try {
+        const res = await fetch('/api/tasks/workload', {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          const w = data.data;
+          document.getElementById('workloadStatsBody').innerHTML = `
+            <div style="font-size: 0.9rem;">
+              <div>Capacity: <strong>${w.capacityHours}h / week</strong></div>
+              <div>Allocated Estimated: <strong>${w.totalEstimatedHours}h</strong></div>
+              <div>Actual Logged: <strong>${w.totalActualHours}h</strong></div>
+              <div style="margin-top: 0.5rem;">Utilization: <strong>${w.bandwidthUtilization}%</strong></div>
+              <div style="color: ${w.status === 'OVERALLOCATED' ? 'var(--danger)' : 'var(--accent)'}; font-weight: 700; margin-top: 0.25rem;">Status: ${w.status}</div>
+            </div>
+          `;
+        }
+      } catch (err) {}
+    }
+
+    async function handleCreateTeam(e) {
+      e.preventDefault();
+      const name = document.getElementById('teamName').value;
+      const description = document.getElementById('teamDesc').value;
+      try {
+        const res = await fetch('/api/teams', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+          body: JSON.stringify({ name, description })
+        });
+        const data = await res.json();
+        if (data.success) showToast('Team created!');
+      } catch (err) {}
+    }
+
+    async function fetchNotifications() {
+      if (!authToken) return;
+      try {
+        const res = await fetch('/api/notifications', {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          document.getElementById('unreadCountBadge').textContent = data.unreadCount;
+          const list = document.getElementById('notifsList');
+          if (data.data.length === 0) {
+            list.innerHTML = '<p style="color: var(--text-muted); text-align: center;">No notifications.</p>';
+            return;
+          }
+          list.innerHTML = data.data.map(n => `
+            <div style="background: var(--input-bg); border: 1px solid var(--card-border); padding: 0.6rem; border-radius: 0.5rem;">
+              <div style="font-weight: 600; font-size: 0.85rem;">${escapeHtml(n.title)}</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">${escapeHtml(n.message)}</div>
+            </div>
+          `).join('');
+        }
+      } catch (err) {}
+    }
+
+    async function markAllNotificationsRead() {
+      try {
+        await fetch('/api/notifications/read-all', {
+          method: 'PUT',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        showToast('Notifications marked read');
+        fetchNotifications();
+      } catch (err) {}
+    }
+
+    async function triggerDemoNotif() {
+      try {
+        await fetch('/api/notifications', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+          body: JSON.stringify({ title: 'Task Deadline Alert', message: 'You have 3 tasks due before midnight!', type: 'warning' })
+        });
+        showToast('Demo notification generated');
+        fetchNotifications();
+      } catch (err) {}
+    }
+
+    // Interactive CLI Handler
+    function handleCliInput(e) {
+      if (e.key === 'Enter') {
+        const inputEl = document.getElementById('cliInput');
+        const cmd = inputEl.value.trim();
+        inputEl.value = '';
+        if (!cmd) return;
+
+        const output = document.getElementById('cliOutput');
+        output.textContent += `\nantigravity@task-cli:~$ ${cmd}\n`;
+
+        if (cmd === 'help') {
+          output.textContent += `Available Shell Commands:\n - help: Display CLI manual\n - task list: List active tasks\n - task add <title>: Quick create task\n - health: Diagnostic status\n - theme <name>: Switch theme\n - backup: Download DB backup\n - clear: Clear terminal screen\n`;
+        } else if (cmd === 'clear') {
+          output.textContent = '=======================================================\n🚀 Task Management CLI Terminal Shell v1.0.0\n=======================================================\n';
+        } else if (cmd === 'health') {
+          checkSystemHealth();
+          output.textContent += `[System Diagnostic Dispatched]\n`;
+        } else if (cmd.startsWith('theme ')) {
+          const themeName = cmd.split(' ')[1];
+          setTheme(themeName);
+          output.textContent += `Switched theme to ${themeName}\n`;
+        } else if (cmd === 'task list') {
+          output.textContent += `Tasks:\n` + cachedTasks.map(t => ` [${t.completed ? 'x' : ' '}] ${t.title} (${t.priority})`).join('\n') + `\n`;
+        } else if (cmd.startsWith('task add ')) {
+          const title = cmd.replace('task add ', '');
+          document.getElementById('taskTitle').value = title;
+          output.textContent += `Populated title field with: "${title}". Click Save Task to persist.\n`;
+        } else if (cmd === 'backup') {
+          backupDatabase();
+          output.textContent += `Exporting database snapshot...\n`;
+        } else {
+          output.textContent += `Unknown command: '${cmd}'. Type 'help' for guidance.\n`;
+        }
+        output.scrollTop = output.scrollHeight;
+      }
+    }
+
+    async function backupDatabase() {
+      if (!authToken) return alert('Login required');
+      try {
+        const res = await fetch('/api/tasks/backup', {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        downloadFile(JSON.stringify(data, null, 2), 'task_management_db_backup.json', 'application/json');
+        showToast('Full Database Snapshot Backup Downloaded!');
+      } catch (err) {}
+    }
+
+    async function fetchAuditLogs() {
+      if (!authToken) return;
+      try {
+        const res = await fetch('/api/audit-logs', {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          const body = document.getElementById('auditLogBody');
+          body.textContent = data.data.map(l => `[${new Date(l.createdAt).toLocaleTimeString()}] ${l.action} | User: ${l.username} | ${l.details}`).join('\n');
+        }
+      } catch (err) {}
+    }
+
+    async function fetchWebhooks() {
+      if (!authToken) return;
+      try {
+        const res = await fetch('/api/webhooks', {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          const list = document.getElementById('webhooksList');
+          if (data.data.length === 0) {
+            list.innerHTML = '<p style="color: var(--text-muted);">No active webhooks registered.</p>';
+            return;
+          }
+          list.innerHTML = data.data.map(w => `
+            <div style="background: var(--input-bg); border: 1px solid var(--card-border); padding: 0.6rem; border-radius: 0.5rem; margin-bottom: 0.4rem; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-weight: 700; font-size: 0.85rem;">${escapeHtml(w.name)}</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">${escapeHtml(w.url)}</div>
+              </div>
+              <button class="btn btn-secondary" style="padding: 0.2rem 0.4rem; font-size: 0.7rem;" onclick="testWebhook('${w._id}')">Test</button>
+            </div>
+          `).join('');
+        }
+      } catch (err) {}
+    }
+
+    async function handleCreateWebhook(e) {
+      e.preventDefault();
+      const name = document.getElementById('whName').value;
+      const url = document.getElementById('whUrl').value;
+      try {
+        const res = await fetch('/api/webhooks', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+          body: JSON.stringify({ name, url })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Webhook registered!');
+          fetchWebhooks();
+        }
+      } catch (err) {}
+    }
+
+    async function testWebhook(id) {
+      try {
+        const res = await fetch(`/api/webhooks/${id}/test`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        alert(data.message);
+      } catch (err) {}
+    }
+
+    async function promptAddComment(taskId) {
+      const text = prompt('Enter task comment:');
+      if (!text) return;
+
+      try {
+        const res = await fetch(`/api/tasks/${taskId}/comments`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+          body: JSON.stringify({ text })
+        });
+        const data = await res.json();
+        showToast('Comment added');
+        fetchTasks();
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    async function softDeleteTask(id) {
+      try {
+        const res = await fetch(`/api/tasks/${id}/soft`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        showToast('Task moved to trash');
+        fetchStats();
+        fetchTasks();
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    async function updateStatus(id, status) {
+      try {
+        const completed = status === 'completed';
+        const res = await fetch(`/api/tasks/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+          body: JSON.stringify({ status, completed })
+        });
+        await res.json();
+        showToast(`Status updated to ${status}`);
+        fetchStats();
+        fetchTasks();
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    async function togglePin(id) {
+      try {
+        const res = await fetch(`/api/tasks/${id}/pin`, {
+          method: 'PATCH',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        showToast(data.data.isPinned ? 'Task pinned' : 'Task unpinned');
+        fetchTasks();
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    async function shareTaskModal(id) {
+      const email = prompt('Enter user email address to share this task with:');
+      if (!email) return;
+
+      try {
+        const res = await fetch(`/api/tasks/${id}/share`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+          body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+        logConsole(`POST /api/tasks/${id}/share`, data);
+        if (data.success) {
+          showToast(`Task shared with ${email}`);
+          fetchTasks();
+        } else {
+          alert(data.error);
+        }
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    async function importJSON(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        try {
+          const tasks = JSON.parse(event.target.result);
+          const res = await fetch('/api/tasks/import', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+            body: JSON.stringify({ tasks })
+          });
+          const data = await res.json();
+          logConsole('POST /api/tasks/import', data);
+          if (data.success) {
+            showToast(`Imported ${data.count} tasks successfully`);
+            fetchStats();
+            fetchTasks();
+          } else {
+            alert(data.error);
+          }
+        } catch (err) {
+          alert('Invalid JSON file format');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    async function promptAddSubtask(taskId) {
+      const title = prompt('Enter subtask title:');
+      if (!title) return;
+
+      try {
+        const res = await fetch(`/api/tasks/${taskId}/subtasks`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+          body: JSON.stringify({ title })
+        });
+        await res.json();
+        fetchTasks();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function toggleSubtask(taskId, subtaskId) {
+      try {
+        await fetch(`/api/tasks/${taskId}/subtasks/${subtaskId}`, {
+          method: 'PATCH',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        fetchTasks();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function toggleTaskComplete(id, completed) {
+      try {
+        await fetch(`/api/tasks/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+          body: JSON.stringify({ completed })
+        });
+        if (completed) playChime('success');
+        showToast(completed ? 'Task completed' : 'Task pending');
+        fetchStats();
+        fetchTasks();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function bulkComplete() {
+      try {
+        const res = await fetch('/api/tasks/bulk-complete', {
+          method: 'PATCH',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        playChime('success');
+        showToast(data.message || 'Tasks completed');
+        fetchStats();
+        fetchTasks();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function bulkDelete() {
+      if (!confirm('Delete all completed tasks?')) return;
+      try {
+        const res = await fetch('/api/tasks/bulk-delete', {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        showToast(data.message || 'Completed tasks cleared');
+        fetchStats();
+        fetchTasks();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function exportTasks(format) {
+      if (!cachedTasks || cachedTasks.length === 0) return alert('No tasks to export');
+
+      if (format === 'json') {
+        const jsonStr = JSON.stringify(cachedTasks, null, 2);
+        downloadFile(jsonStr, 'tasks_export.json', 'application/json');
+      } else if (format === 'csv') {
+        const headers = ['Title', 'Description', 'Completed', 'Status', 'Priority', 'Category', 'DueDate', 'EstHours', 'ActHours'];
+        const rows = cachedTasks.map(t => [
+          `"${t.title.replace(/"/g, '""')}"`,
+          `"${(t.description || '').replace(/"/g, '""')}"`,
+          t.completed,
+          t.status || 'todo',
+          t.priority,
+          t.category,
+          t.dueDate || '',
+          t.estimatedHours || 0,
+          t.actualHours || 0
+        ]);
+        const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+        downloadFile(csvContent, 'tasks_export.csv', 'text/csv');
+      } else if (format === 'md') {
+        const mdLines = [
+          '# Client Task Collection Export Summary Report',
+          `Generated on ${new Date().toLocaleString()}\n`,
+          ...cachedTasks.map(t => `- [${t.completed ? 'x' : ' '}] **${t.title}** (${t.priority.toUpperCase()}) - ${t.category}\n  ${t.description || 'No description'}`)
+        ];
+        downloadFile(mdLines.join('\n'), 'tasks_report.md', 'text/markdown');
+      }
+    }
+
+    function downloadFile(content, filename, mimeType) {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    async function handleUpdateProfile(e) {
+      e.preventDefault();
+      const name = document.getElementById('editName').value;
+      const email = document.getElementById('editEmail').value;
+
+      try {
+        const res = await fetch('/api/users/profile', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+          body: JSON.stringify({ name, email })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Profile updated successfully');
+        } else {
+          alert(data.error);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function handleChangePassword(e) {
+      e.preventDefault();
+      const currentPassword = document.getElementById('currentPass').value;
+      const newPassword = document.getElementById('newPass').value;
+
+      try {
+        const res = await fetch('/api/users/password', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+          body: JSON.stringify({ currentPassword, newPassword })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Password changed successfully');
+          document.getElementById('currentPass').value = '';
+          document.getElementById('newPass').value = '';
+        } else {
+          alert(data.error);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function changePage(delta) {
+      currentPage += delta;
+      fetchTasks();
+    }
+
+    function logConsole(title, data) {
+      const consoleBox = document.getElementById('apiConsole');
+      const timestamp = new Date().toLocaleTimeString();
+      const logText = `// [${timestamp}] ${title}\n${JSON.stringify(data, null, 2)}\n\n`;
+      consoleBox.textContent = logText + consoleBox.textContent;
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+  </script>
+</body>
+</html>
